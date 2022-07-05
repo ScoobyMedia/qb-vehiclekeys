@@ -15,6 +15,30 @@ local IsHotwiring = false
 -----------------------
 ----   Threads     ----
 -----------------------
+-----------------------
+-----FROGCF------------
+local hasthekey = false
+CreateThread(function()
+    while true do
+        if not hasthekey then
+        local vehicle = QBCore.Functions.GetClosestVehicle()
+        local plate = QBCore.Functions.GetPlate(vehicle)
+        local pedcoords = GetEntityCoords(PlayerPedId())
+        local vehCoords = GetEntityCoords(vehicle)
+        local onDuty = QBCore.Functions.GetPlayerData().job.onduty
+
+        dist = #(pedcoords - vehCoords)
+            if dist < 2 then
+                if onDuty and QBCore.Functions.GetPlayerData().job.name == 'police' or onDuty and QBCore.Functions.GetPlayerData().job.name == 'mechanic' then
+                    TriggerEvent("vehiclekeys:client:SetOwner", plate)
+                    hasthekey = true
+                end
+            end
+        end
+        Wait(2500)
+    end
+end)
+
 
 CreateThread(function()
     while true do
